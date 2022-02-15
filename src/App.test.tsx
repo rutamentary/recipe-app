@@ -18,7 +18,6 @@ test('button does things', async () => {
   const btn = screen.getByText(/Call Api/i);
   fireEvent.click(btn)
 
-
   const textAfter = await screen.findByText(expectedText)
 
   expect(textAfter).toBeInTheDocument()
