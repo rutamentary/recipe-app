@@ -1,7 +1,8 @@
-import React, {useState, FC} from 'react';
+import { Button, Col, List, Row, Typography } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import React, { FC, useState } from 'react';
 import './App.css';
-import { Button } from 'antd';
-import { useForm } from "react-hook-form";
+import Form from './Form';
 
 const apiCall = async function () {
     return 'foo';
@@ -9,17 +10,35 @@ const apiCall = async function () {
 
 const App: FC = () => {
   const [recipe, setRecipe] = useState('');
+
+  const [ingredients, setIngredients] = useState<string[]>([])
+  console.log('ingredients', ingredients)
+
   return (
     <div className="App">
-      <Button 
-        type="primary" 
-        onClick={async function () {
-          const text = await apiCall();
-          setRecipe(text);
-        }}
-      >Call API
-      </Button>
-        <p>{recipe}</p>
+    <Row>
+      <Col span={8}></Col>
+      <Col span={8}>
+         <Form setIngredients={setIngredients} />
+        <List
+        dataSource={ingredients}
+        renderItem={item => (
+          <List.Item>
+            <Typography.Text mark>{item}</Typography.Text>
+            <CloseCircleOutlined />
+          </List.Item>
+        )} />
+        <Button 
+          type="primary" 
+          onClick={async function () {
+            const text = await apiCall();
+            setRecipe(text);
+          }}
+        >Call API
+        </Button>
+      </Col>
+      <Col span={8}></Col>
+    </Row>
     </div>
   );
 }
