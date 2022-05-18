@@ -2,7 +2,7 @@ import { Button, Col, List, Row, Typography } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import React, { FC, useState } from 'react';
 import './App.css';
-import Form from './Form';
+import Form from './components/Form';
 
 const apiCall = async function () {
     return 'foo';
