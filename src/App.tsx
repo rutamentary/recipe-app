@@ -1,16 +1,17 @@
-import { Button, Col, List, Row, Typography } from 'antd';
+import {Button, Col, List, Result, Row, Typography} from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { FC, useEffect, useState } from 'react';
 import './App.css';
 import Form from './components/Form';
-import ImageResult from './components/ImageResult';
+import Results from './components/Results';
 
 const recipeIdeasURL = 'https://api.spoonacular.com/recipes/findByIngredients';
 const recipeURL = 'https://api.spoonacular.com/recipes/';
 
 interface ResultProps {
   id: number,
-  image: string
+  image: string,
+  title: string
 }
 
 const App: FC = () => {
@@ -27,7 +28,8 @@ const App: FC = () => {
     for(let i = 0; i < body.length; i++){
       const obj = {
         id: body[i].id,
-        image: body[i].image
+        image: body[i].image,
+        title: body[i].title
       }
       setRecipes((prev) => {
         return [...prev, obj];
@@ -37,9 +39,9 @@ const App: FC = () => {
   }
 
   const handleQueryRecipe = async (id: number) => {
-    const response = await fetch( `${recipeURL}${id}/information?apiKey=${key}"` );
+    const response = await fetch( `${recipeURL}${id}/information?apiKey=${key}` );
     const body = await response.json();
-    setRecipe(body);
+    setRecipe(body.instructions);
   }
 
   const removeIngredients = (index: number) => {
@@ -78,6 +80,7 @@ const App: FC = () => {
         </Col>
         <Col span={8}></Col>
       </Row>
+      {recipe ? <Row><Button onClick={() => {setRecipe('')}}>Back</Button> {recipe}</Row> :
       <Row>
         <Col span={8}></Col>
         <Col span={8}>
@@ -85,12 +88,12 @@ const App: FC = () => {
             dataSource={recipes}
             renderItem={(item:ResultProps, index) => (
               <List.Item>
-                <ImageResult image={item.image} id={item.id}></ImageResult>
+                <Results image={item.image} id={item.id} title={item.title} onClick={() => handleQueryRecipe(item.id)}></Results>
               </List.Item>
             )} />
         </Col>
         <Col span={8}></Col>
-      </Row>
+      </Row>}
     </div>
   );
 }
