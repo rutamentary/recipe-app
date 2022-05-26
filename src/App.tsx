@@ -14,7 +14,7 @@ interface ResultProps {
 }
 
 const App: FC = () => {
-  const [recipes, setRecipes] =useState([]);
+  const [recipes, setRecipes] =useState<ResultProps[]>([]);
   const [recipe, setRecipe] =useState<string>('');
   const [ingredients, setIngredients] = useState<string[]>([])
   const key = process.env.REACT_APP_KEY;
