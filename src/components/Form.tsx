@@ -31,7 +31,7 @@ const Form: React.VFC<FormProps> = ({setIngredients}) => {
         />
         </Col>
         <Col span={1}>
-          <Button onClick={handleAddItem}>
+          <Button type={'primary'} onClick={handleAddItem}>
             <CheckOutlined />
           </Button>
         </Col>

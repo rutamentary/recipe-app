@@ -3,13 +3,18 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 import { FC, useEffect, useState } from 'react';
 import './App.css';
 import Form from './components/Form';
-import Result from './components/ImageResult';
+import ImageResult from './components/ImageResult';
 
 const recipeIdeasURL = 'https://api.spoonacular.com/recipes/findByIngredients';
 const recipeURL = 'https://api.spoonacular.com/recipes/';
 
+interface ResultProps {
+  id: number,
+  image: string
+}
+
 const App: FC = () => {
-  const [recipes, setRecipes] =useState<string[]>([]);
+  const [recipes, setRecipes] =useState([]);
   const [recipe, setRecipe] =useState<string>('');
   const [ingredients, setIngredients] = useState<string[]>([])
   const key = process.env.REACT_APP_KEY;
@@ -19,7 +24,16 @@ const App: FC = () => {
     const response = await fetch( `${recipeIdeasURL}?apiKey=${key}&ingredients="${list}"` );
     const body = await response.json();
     console.log(body);
-    setRecipes(body);
+    for(let i = 0; i < body.length; i++){
+      const obj = {
+        id: body[i].id,
+        image: body[i].image
+      }
+      setRecipes((prev) => {
+        return [...prev, obj];
+      });
+    }
+    console.log(recipes);
   }
 
   const handleQueryRecipe = async (id: number) => {
@@ -69,9 +83,9 @@ const App: FC = () => {
         <Col span={8}>
           <List
             dataSource={recipes}
-            renderItem={(item, index) => (
+            renderItem={(item:ResultProps, index) => (
               <List.Item>
-                <Result image={item}></Result>
+                <ImageResult image={item.image} id={item.id}></ImageResult>
               </List.Item>
             )} />
         </Col>

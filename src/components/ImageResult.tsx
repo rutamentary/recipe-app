@@ -1,5 +1,5 @@
-const Results: React.VFC<{image: string}> = ({image}) => {       
-    return <img src={image}> </img>;
+const Results: React.VFC<{image: string, id: number}> = ({image, id}) => {       
+    return <img src={image}></img>;
 };
 
 export default Results;
