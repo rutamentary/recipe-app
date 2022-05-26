@@ -23,11 +23,9 @@ const App: FC = () => {
   }
 
   const handleQueryRecipe = async (id: number) => {
-    const list = ingredients.join(",");
     const response = await fetch( `${recipeURL}${id}/information?apiKey=${key}"` );
     const body = await response.json();
-    console.log(body);
-    setRecipes(body);
+    setRecipe(body);
   }
 
   const removeIngredients = (index: number) => {
