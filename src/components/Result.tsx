@@ -1,6 +1,11 @@
-import { Image } from "antd"
+import { Image} from "antd";
+import { ResultProps } from '../App';
 
-const Result: React.VFC<{image: string, id: number, title: string, onClick: () => void}> = ({image, id, title, onClick}) => {
+interface ResultsProps extends ResultProps {
+    onClick: () => Promise<void>
+}
+
+const Result: React.VFC<ResultsProps> = ({image, title, onClick}) => {
     return (
         <>
             <Image src={image} preview={false} onClick={(e) => {e.preventDefault(); onClick()}} />

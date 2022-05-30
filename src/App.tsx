@@ -1,23 +1,29 @@
-import {Button, Col, List, Row, Typography} from 'antd';
-import { CloseCircleOutlined, LeftCircleOutlined } from '@ant-design/icons';
-import { FC, useState } from 'react';
+import {Button, Col, List, Row} from 'antd';
+import { LeftCircleOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 import './App.css';
-import Form from './components/Form';
 import Result from './components/Result';
 import Title from './components/Title';
+import Receipe from './components/Recipe';
+import FormWrapper from './components/wrappers/FormWrapper';
 
 const recipeIdeasURL = 'https://api.spoonacular.com/recipes/findByIngredients';
 const recipeURL = 'https://api.spoonacular.com/recipes/';
 
-interface ResultProps {
+export interface ResultProps {
   id: number,
   image: string,
-  title: string
+  title: string,
 }
 
-const App: FC = () => {
+export interface RecipeProps {
+  instructions: string,
+  image: string,
+}
+
+const App: React.VFC = () => {
   const [recipes, setRecipes] =useState<ResultProps[]>([]);
-  const [recipe, setRecipe] =useState<string>('');
+  const [recipe, setRecipe] =useState<RecipeProps>();
   const [ingredients, setIngredients] = useState<string[]>([])
   const key = process.env.REACT_APP_KEY;
 
@@ -42,7 +48,11 @@ const App: FC = () => {
   const handleQueryRecipe = async (id: number) => {
     const response = await fetch( `${recipeURL}${id}/information?apiKey=${key}` );
     const body = await response.json();
-    setRecipe(body.instructions);
+    const recipeData = {
+      instructions: body.instructions,
+      image: body.image
+    }
+    setRecipe(recipeData);
   }
 
   const removeIngredients = (index: number) => {
@@ -55,37 +65,16 @@ const App: FC = () => {
   return (
     <div className="App">
       <Title />
-      <Form setIngredients={setIngredients} />
-      <Row>
-        <Col span={8} offset={8}>
-          <List
-            dataSource={ingredients}
-            renderItem={(item, index) => (
-            <List.Item>
-              <Typography.Text mark>{item}</Typography.Text>
-              <CloseCircleOutlined onClick={() => removeIngredients(index)} />
-            </List.Item>
-            )} 
-          />
-          <Button 
-            type="primary" 
-            onClick={handleQueryRecipes}
-          > Call API
-          </Button>
-        </Col>
-      </Row>
-      
-      {recipe ? 
-      <Row>
-        <Col span={8}>
-          <Button type="link" onClick={() => {setRecipe('')}}>
+      <FormWrapper ingredients={ingredients} setIngredients={setIngredients} removeIngredients={removeIngredients} handleQueryRecipes={handleQueryRecipes} />
+      {recipe ?
+      <>
+        <Row>
+          <Button type="link" onClick={() => {setRecipe(undefined)}}>
             <LeftCircleOutlined />
           </Button>
-        </Col>
-        <Col>
-          {recipe}
-        </Col>
-      </Row> :
+        </Row>
+          <Receipe instructions={recipe.instructions} image={recipe.image} />
+      </> :
       <Row>
         <Col span={8}></Col>
         <Col span={8}>
