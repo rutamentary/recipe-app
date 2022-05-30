@@ -1,9 +1,10 @@
-import {Button, Col, List, Result, Row, Typography} from 'antd';
+import {Button, Col, List, Row, Typography} from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import './App.css';
 import Form from './components/Form';
-import Results from './components/Results';
+import Result from './components/Result';
+import Title from './components/Title';
 
 const recipeIdeasURL = 'https://api.spoonacular.com/recipes/findByIngredients';
 const recipeURL = 'https://api.spoonacular.com/recipes/';
@@ -53,17 +54,10 @@ const App: FC = () => {
 
   return (
     <div className="App">
+      <Title />
+      <Form setIngredients={setIngredients} />
       <Row>
-        <Col span={8}></Col>
-        <Col span={8}>
-          <h3>What's for dinner?</h3>
-        </Col>
-        <Col span={8}></Col>
-      </Row>
-      <Row>
-        <Col span={8}></Col>
-        <Col span={8}>
-          <Form setIngredients={setIngredients} />
+        <Col span={8} offset={8}>
           <List
             dataSource={ingredients}
             renderItem={(item, index) => (
@@ -71,16 +65,23 @@ const App: FC = () => {
               <Typography.Text mark>{item}</Typography.Text>
               <CloseCircleOutlined onClick={() => removeIngredients(index)} />
             </List.Item>
-          )} />
+            )} 
+          />
           <Button 
             type="primary" 
             onClick={handleQueryRecipes}
           > Call API
           </Button>
         </Col>
-        <Col span={8}></Col>
       </Row>
-      {recipe ? <Row><Button onClick={() => {setRecipe('')}}>Back</Button> {recipe}</Row> :
+      
+      {recipe ? 
+      <Row>
+        <Col span={8}><Button onClick={() => {setRecipe('')}}>Back</Button></Col>
+        <Col>
+          {recipe}
+        </Col>
+      </Row> :
       <Row>
         <Col span={8}></Col>
         <Col span={8}>
@@ -88,7 +89,7 @@ const App: FC = () => {
             dataSource={recipes}
             renderItem={(item:ResultProps, index) => (
               <List.Item>
-                <Results image={item.image} id={item.id} title={item.title} onClick={() => handleQueryRecipe(item.id)}></Results>
+                <Result image={item.image} id={item.id} title={item.title} onClick={() => handleQueryRecipe(item.id)}></Result>
               </List.Item>
             )} />
         </Col>

@@ -10,6 +10,7 @@ const Form: React.VFC<FormProps> = ({setIngredients}) => {
   const [textInput, setTextInput] =useState('')
 
   const handleAddItem = () => {
+    if(!textInput || !textInput.trim()) return;
     setIngredients((prev) => {
       return [...prev, textInput];
     });
@@ -17,26 +18,30 @@ const Form: React.VFC<FormProps> = ({setIngredients}) => {
   };
 
   return(
-    <form 
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <Row>
-        <Col span={23}>
-          <Input 
-          value={textInput}
-          onChange={(e) => {setTextInput(e.target.value)}}
-          onPressEnter={handleAddItem}
-        />
-        </Col>
-        <Col span={1}>
-          <Button type={'primary'} onClick={handleAddItem}>
-            <CheckOutlined />
-          </Button>
-        </Col>
-      </Row> 
-    </form>
+    <Row>
+      <Col span={8} offset={8}>
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+          >
+          <Row>
+            <Col span={23}>
+              <Input 
+              value={textInput}
+              onChange={(e) => {setTextInput(e.target.value)}}
+              onPressEnter={handleAddItem}
+            />
+            </Col>
+            <Col span={1}>
+              <Button type={'primary'} onClick={(e) => { e.preventDefault(); handleAddItem()}}>
+                <CheckOutlined />
+              </Button>
+            </Col>
+          </Row> 
+        </form>
+      </Col>
+    </Row>
   )
 }
 
