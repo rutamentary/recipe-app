@@ -1,5 +1,5 @@
 import {Button, Col, List, Row, Typography} from 'antd';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, LeftCircleOutlined } from '@ant-design/icons';
 import { FC, useState } from 'react';
 import './App.css';
 import Form from './components/Form';
@@ -77,7 +77,11 @@ const App: FC = () => {
       
       {recipe ? 
       <Row>
-        <Col span={8}><Button onClick={() => {setRecipe('')}}>Back</Button></Col>
+        <Col span={8}>
+          <Button type="link" onClick={() => {setRecipe('')}}>
+            <LeftCircleOutlined />
+          </Button>
+        </Col>
         <Col>
           {recipe}
         </Col>
